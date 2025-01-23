@@ -67,6 +67,18 @@ flink_keywords = ["RichSourceFunction", "SourceFunction", "RichMapFunction", "Ma
 # Storm keywords
 storm_keywords = ["BaseRichSpout", "BaseRichBolt", "BaseBasicBolt"]
 
+# MPI keywords
+mpi_keywords = ["MPI_Init", "MPI_Finalize", "MPI_Comm_size", "MPI_Comm_rank", "MPI_Send", "MPI_Recv", "MPI_Bcast", "MPI_Scatter", "MPI_Gather", "MPI_Allgather", "MPI_Allreduce", "MPI_Reduce", "MPI_Barrier", "MPI_Wait", "MPI_Waitall", "MPI_Waitany", "MPI_Isend", "MPI_Irecv", "MPI_Ibcast", "MPI_Iscatter", "MPI_Igather", "MPI_Iallgather", "MPI_Iallreduce", "MPI_Ireduce", "MPI_Ibarrier", "MPI_Iwait", "MPI_Iwaitall", "MPI_Iwaitany", "MPI_Test", "MPI_Testall", "MPI_Testany", "MPI_Testsome", "MPI_Cancel", "MPI_Request_free", "MPI_Comm_create", "MPI_Comm_split", "MPI_Comm_dup", "MPI_Comm_free", "MPI_Comm_group", "MPI_Group_incl", "MPI_Group_excl", "MPI_Group_free", "MPI_Comm_create_group", "MPI_Comm_set_name", "MPI_Comm_get_name", "MPI_Comm_get_parent", "MPI_Comm_remote_size", "MPI_Comm_remote_group", "MPI_Comm_idup", "MPI_Comm_idup_with_info", "MPI_Comm_split_type", "MPI_Comm_set_info", "MPI_Comm_get_info", "MPI_Comm_dup_with_info", "MPI_Comm_create_errhandler", "MPI_Comm_set_errhandler", "MPI_Comm_get_errhandler", "MPI_Comm_call_errhandler", "MPI_Comm_create_keyval", "MPI_Comm_free_keyval", "MPI_Comm_get_attr", "MPI_Comm_set_attr", "MPI_Comm_delete_attr"]
+
+# ResiFlow keywords
+resiflow_keywords = mpi_keywords + ["rf::init", "rf::finalize", "rf::serialization::serialize", "rf::serialization::deserialize", "rf::keyStore::store", "rf::keyStore::retrieve", "rf::keyStore::contains", "rf::pipeline::run", "rf::utility::getRank", "rf::utility::getCommunicatorSize", "rf::utility::getProcessorName", "rf::utility::getExecutionPlan", "rf::utility::getNode", "rf::ISourceOperator", "rf::IMiddleOperator", "rf::ISinkOperator", "rf::Message", "setReplicate(", "setOrdered("]
+
+# DSParLib keywords
+dsparlib_keywords = mpi_keywords + ["dspar::Emitter", "dspar::Worker", "dspar::Collector", "dspar::TrivialSendReceive", "dspar::Farm", "SetCollectorIsOrdered(", "SetOnDemandScheduling(", "SetWorkerReplicas(", "Start("]
+
+# MPR keywords
+mpr_keywords = mpi_keywords + ["mpr::StageProcess", "mpr::PipelineGraph", "AddPipelineStage(", "Run(", "Produce(", "Publish(", "PublishMulti("]
+
 # OpenMP keywords
 openmp_keywords = [
     # Directives
@@ -317,7 +329,7 @@ def countKeyword(args, i):
 	
 	strings = fileList[i].split(" ")
 
-	if args.api == "spar" or args.api == "fastflow" or args.api == "tbb" or args.api == "grppi" or args.api == "openmp" or args.api == "cppthreads":
+	if args.api == "spar" or args.api == "fastflow" or args.api == "tbb" or args.api == "grppi" or args.api == "openmp" or args.api == "cppthreads" or args.api == "mpi" or args.api == "resiflow" or args.api == "dsparlib" or args.api == "mpr":
 		for j in range(len(strings)):
 			if strings[j] != '':
 				if strings[j] in c_cpp_keywords:
@@ -455,6 +467,59 @@ def countApiKeyword(args, i):
 						total_operators.append(strings[j])
 		
 						count_operators.append(1)
+	if args.api == "mpi":
+		for j in range(len(strings)):
+			if strings[j] != '':
+				if strings[j] in mpi_keywords:
+					foundPragma = True  
+					fileList[i] = fileList[i].replace(strings[j], ' ', 1)
+					try:
+						k = total_operators.index(strings[j])
+						count_operators[k] += 1
+					except:
+						total_operators.append(strings[j])
+		
+						count_operators.append(1)
+	if args.api == "resiflow":
+		for j in range(len(strings)):
+			if strings[j] != '':
+				if strings[j] in resiflow_keywords:
+					foundPragma = True  
+					fileList[i] = fileList[i].replace(strings[j], ' ', 1)
+					try:
+						k = total_operators.index(strings[j])
+						count_operators[k] += 1
+					except:
+						total_operators.append(strings[j])
+		
+						count_operators.append(1)
+	if args.api == "dsparlib":
+		for j in range(len(strings)):
+			if strings[j] != '':
+				if strings[j] in dsparlib_keywords:
+					foundPragma = True  
+					fileList[i] = fileList[i].replace(strings[j], ' ', 1)
+					try:
+						k = total_operators.index(strings[j])
+						count_operators[k] += 1
+					except:
+						total_operators.append(strings[j])
+		
+						count_operators.append(1)
+	if args.api == "mpr":
+		for j in range(len(strings)):
+			if strings[j] != '':
+				if strings[j] in mpr_keywords:
+					foundPragma = True  
+					fileList[i] = fileList[i].replace(strings[j], ' ', 1)
+					try:
+						k = total_operators.index(strings[j])
+						count_operators[k] += 1
+					except:
+						total_operators.append(strings[j])
+		
+						count_operators.append(1)
+
 # count the number of operands in the code
 def countOperands(i):
 	global fileList

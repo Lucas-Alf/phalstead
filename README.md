@@ -17,10 +17,14 @@ Based on the number of tokens the following metrics are measured:
 
 The currently version allows the analysis of C++ code parallelized using the following parallel programming models:
 
-- Intel TBB
-- FastFlow 
-- GrPPI
-- SPar
+- [Intel TBB](https://github.com/uxlfoundation/oneTBB)
+- [FastFlow](https://github.com/fastflow/fastflow)
+- [GrPPI](https://github.com/arcosuc3m/grppi)
+- [SPar](https://github.com/GMAP/spar)
+- [MPI](https://www.open-mpi.org)
+- [DSParLib](https://github.com/GMAP/DSParLib)
+- [MPR](https://github.com/GMAP/mpr)
+- ResiFlow
 
 In addition, the currently version allows the analysis of Java code parallelized using the following parallel programming models:
 
